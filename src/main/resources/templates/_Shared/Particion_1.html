@@ -1,0 +1,103 @@
+<html xmlns:th="http://www.thymeleaf.org" >
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"
+        asp-append-version="true">
+        
+    <link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+        
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" asp-append-version="true"></script>
+  <div class="first-partition"  >
+
+        <div class="content-profile" th:style="'background-image:url(' + ${f1} + ');'">
+        </div>
+        <span class="nombre-profile" >
+            <h1 th:text="${nombresYedad}" ></h1> 
+        </span>
+        <nav class="menuContainer ">
+            <ol class="menuDetails">
+                <li id="btnBuscarAmistad">
+                 <a class="link" href="/Inicio"> Buscar Amistad</a>
+                </li>
+                <li id="btnMantenerUsuario">
+                 <a class="link"  href="/Perfil" >Ver mi Perfil</a>
+                </li>
+                <li  id="btnMatchs">
+                 <a class="link"  href="/Chat">Matchs y Chats</a>
+                </li>
+                <li id="btnMeGustas">
+                    <a class="link" href="/MeGustas" >Mis me Gustas</a>
+                </li>
+                <li id="btnSubscripcion">
+                 <a class="link" href="/Suscripcion" >Subscripcion</a>       
+                </il>
+                <li id="btnCerrarSesion" style="margin-top:50px;">
+                    <a class="link link-cerrar-sesion" href="/LogOut">Cerrar Sesion</a>       
+                </il>
+            </ol>
+     </nav>
+    </div>
+    <script>
+    	
+    	    $(document).ready(function () {
+            $("#btnBuscarAmistad").click(function () {
+                $("#btnBuscarAmistad").addClass("selected");
+            });
+            $("#btnMantenerUsuario").click(function () {
+                $("#btnMantenerUsuario").addClass("selected");
+            });
+            $("#btnMatchs").click(function () {
+                $("#btnMatchs").addClass("selected");
+            });
+            $("#btnMeGustas").click(function () {
+                $("#btnMeGustas").addClass("selected");
+            });
+            $("#btnSubscripcion").click(function () {
+                $("#btnSubscripcion").addClass("selected");
+            });
+            $("#btnCerrarSesion").click(function () {
+                $("#btnCerrarSesion").addClass("selected");
+            });
+
+        });
+        
+                
+    const menu = document.querySelector('.menuContainer');
+    const burgerButton = document.querySelector('#burger-menu');
+    burgerButton.addEventListener('click', hideShow);
+    function hideShow() {
+        if (menu.classList.contains('is-active')) {
+            menu.classList.remove('is-active');
+        }
+        else {
+            menu.classList.add('is-active');
+        }
+    }
+    const particles = document.querySelector('.particles-js-canvas-el');
+    burgerButton.addEventListener('click', hideShow2);
+    function hideShow2() {
+        if (particles.classList.contains('is-active')) {
+            particles.classList.remove('is-active');
+        }
+        else {
+            particles.classList.add('is-active');
+        }
+    }
+    const blur = document.querySelector('.blur-efect')
+    burgerButton.addEventListener('click', hideShow3);
+    function hideShow3() {
+        if (blur.classList.contains('active')) {
+            blur.classList.remove('active');
+        }
+        else {
+            blur.classList.add('active');
+        }
+
+    }
+    </script>
+ 
+
+
+
+    
+</html>

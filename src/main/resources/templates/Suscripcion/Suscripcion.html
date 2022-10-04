@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="Tindertec|MeGustas" content="width=device-width, initial-scale=1.0">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Tindertec|Suscripcion</title>
+   <link rel="icon" type="image/png" href="img/tindertec_logo1.png">
+   <link href="static/css/style.css" rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+   <link href="static/css/estilosPlanesSubcripcion.css" rel="stylesheet" type="text/css"
+      th:href="@{/css/estilosPlanesSubcripcion.css}">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+   <div class="container-noBT">
+      <div th:include="_Shared/Particion_1.html" th:remove="tag"></div>
+      <script>
+         $("#btnSubscripcion").addClass("selected");
+      </script>
+      <div class="second-partition">
+
+         <style>
+            .subs {
+               position: absolute;
+               Z-INDEX: 1;
+               height: 60vh;
+               width: 70vw;
+               margin-top: 15vh;
+               margin-left: 5vw;
+            }
+         </style>
+
+         <div class="app subs">
+            <div class="titulo">
+               <span>.</span>
+               <h1 class="tituloPlan">Planes de Subscripción</h1>
+            </div>
+
+            <div class="subtitulo">
+               <p>Actualmente te encuentras en el plan <b>FREE</b></p>
+            </div>
+
+
+            <div class="containerPlanes">
+
+               <form class="cardPlan" method="post"  action="/Suscripcion/Boleta1">
+                  <img th:src="@{/img/20.png}" />
+                  <h4>Plan Premium Mensual</h4>
+                  <p>Descripcion: 1 mes de todas nuestras funciones exclusivas </p>
+                  <button type="submit" style="  width: 55%;   background-color: #fc4c6c;   color: white;   padding: 14px 20px;   margin-top: 8px;   margin-bottom: 8px;   border: none;   border-radius: 4px;   cursor: pointer;   font-family: 'Roboto Slab'; ">Elegir</button>
+               </form>
+                <form class="cardPlan" method="post"  action="/Suscripcion/Boleta2">
+                  <img th:src="@{/img/40.png}" />
+                  <h4>Plan Premium Anual</h4>
+                  <p>Descripcion: 1 año de todas nuestras funciones exclusivas </p>
+                   <button type="submit" style="  width: 55%;   background-color: #fc4c6c;   color: white;   padding: 14px 20px;   margin-top: 8px;   margin-bottom: 8px;   border: none;   border-radius: 4px;   cursor: pointer;   font-family: 'Roboto Slab'; ">Elegir</button>
+               </form>
+
+
+            </div>
+
+
+
+
+
+
+
+         </div>
+
+
+
+         <header class="header">
+            <div class="logoContainer">
+               <a href="index.html" class="logo">
+                  <img th:src="@{/img/tindertec_logo1.png}" class="logoImg">
+               </a>
+            </div>
+         </header>
+
+         <div class="container-tindertec">
+         </div>
+
+         <footer class="footer">
+            <a href="index.html" target="_blank">Tindertec © 2022 Todos los derechos reservados.</a>
+         </footer>
+
+      </div>
+
+   </div>
+</body>
+<!-- JS -->
+<script src="code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+<script src="cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+<!-- Fin JS -->
+
+</html>

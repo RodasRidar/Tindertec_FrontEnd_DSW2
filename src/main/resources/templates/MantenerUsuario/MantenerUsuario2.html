@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="Tindertec|MeGustas" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tindertec|Perfil</title>
+    <link rel="icon" type="image/png" href="img/tindertec_logo1.png"> 
+       <link href="static/css/style.css" rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons">
+    <link rel="stylesgeet" href="https://rawgit.com/creativetimofficial/material-kit/master/assets/css/material-kit.css">
+    <link href="static/css/style-MantenerUsuario.css" rel="stylesheet" type="text/css" th:href="@{/css/style-MantenerUsuario.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="container-noBT">
+	<div th:include="_Shared/Particion_1.html" th:remove="tag"></div>
+		<script>
+     		$("#btnMantenerUsuario").addClass("selected");
+		</script>
+    <div class="second-partition">
+ 		 <div class="app">
+				<div class="main main-raised">
+					<div class="profile-content">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-6 ml-auto mr-auto">
+									<div class="profile-tabs">
+										<ul class="nav nav-pills nav-pills-icons justify-content-center" role="tablist">
+											<li class="nav-item">
+												<a class="nav-link active" href="#studio" role="tab" data-toggle="tab">
+													<i class="material-icons">camera</i>
+													Galeria
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="#palette" role="tab" data-toggle="tab">
+													<i class="material-icons">palette</i>
+													Editar Perfil
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link" href="#delete" role="tab" data-toggle="tab">
+													<i class="material-icons">no_accounts</i>
+													Eliminar cuenta
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="tab-content tab-space">
+								<div class="tab-pane active text-center gallery" id="studio">
+
+									<div class="row">
+										<div class="col-md-3 ml-auto img-width">
+											<img th:src="${foto1Gal}" class="rounded">
+											<img th:src="${foto3Gal}" class="rounded">
+											<img th:src="${foto5Gal}" class="rounded">
+										</div>
+
+										<div class="col-md-3 mr-auto img-width">
+											<img th:src="${foto2Gal}" class="rounded">
+											<img th:src="${foto4Gal}" class="rounded">
+										</div>
+									</div>
+
+									<div class="col-md-6 ml-auto mr-auto">
+										<button id="btnPhoto" type="button" class="button" data-toggle="modal"
+											data-target="#photoModal">
+											Agregar imagen
+										</button>
+
+										<!-- Modal -->
+										<div class="modal fade" id="photoModal" tabindex="-1" role="dialog"
+											aria-labelledby="lblPhotoModal" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="title" id="lblPhotoModal">Copia y pega la URL de una
+															imagen</h5>
+														<button type="button" class="close" data-dismiss="modal"
+															aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+
+													<div class="modal-body">
+														<form role="form" id="contact-form" method="post"
+															autocomplete="off">
+															<div class="card-body">
+																<div class="mb-4">
+																	<input type="text">
+																</div>
+
+																<div class="modal-footer">
+
+																	<div class="btnWidth">
+																		<button type="button" class="cancelButton"
+																			data-dismiss="modal">Cancelar</button>
+																	</div>
+
+																	<div class="btnWidth">
+																		<button type="button"
+																			class="button">Aceptar</button>
+																	</div>
+																</div>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="tab-pane" id="palette">
+									<div class="row">
+										<div class="container py-4">
+											<div class="row">
+												<div class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
+
+													<h3 class="title text-center">Editar Perfil</h3>
+
+													<form action="/Perfil/guardar" th:object="${usuario}"
+														id="contact-form" method="post" autocomplete="off">
+														<div class="card-body">
+
+															<div class="mb-4">
+																<label class="textBoxTitle">Nombre Público</label>
+																<input th:field="*{nombres}" type="text"
+																	placeholder="Ingrese Nombre">
+															</div>
+
+															<div class="mb-4">
+																<label class="textBoxTitle">Descripción</label>
+																<input th:field="*{descripcion}" type="text"
+																	placeholder="Ingrese una descripción">
+															</div>
+
+															<div class="mb-4">
+																<label for="genderpref" class="textBoxTitle">Interés de
+																	Género</label>
+																<select id="genderpref" name="genderpref"
+																	th:field="*{cod_interes}">
+																	<option value="-1">Selecciona una preferencia
+																	</option>
+																	<option th:each="p:${lstInteres}"
+																		th:value="${p.cod_interes}"
+																		th:text="${p.des_interes}">
+																	</option>
+																</select>
+															</div>
+
+															<div class="mb-4">
+																<label for="career" class="textBoxTitle">Carrera</label>
+																<select id="career" name="career"
+																	th:field="*{cod_carrera}">
+																	<option value="-1">Selecciona una carrera</option>
+																	<option th:each="c:${lstCarrera}"
+																		th:value="${c.cod_carrera}"
+																		th:text="${c.des_carrera}">
+																	</option>
+																</select>
+															</div>
+
+															<div class="mb-4">
+																<label for="sede" class="textBoxTitle">Sede de
+																	Cibertec</label>
+																<select id="sede" name="sede" th:field="*{cod_sede}">
+																	<option value="-1">Selecciona una sede</option>
+																	<option th:each="s:${lstSede}"
+																		th:value="${s.cod_sede}"
+																		th:text="${s.des_sede}">
+																	</option>
+																</select>
+															</div>
+															<input type="submit" value="Guardar Cambios">
+														</div>
+													</form>
+													<div th:if="${mensajeSucess} != null" class="alert alert-success"
+														role="alert" th:text="${mensajeSucess}"></div>
+													<div th:if="${mensajeError}   != null" class="alert alert-danger"
+														role="alert" th:text="${mensajeError}"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane" id="delete">
+									<div class="row">
+										<div class="container py-4">
+											<div class="row">
+												<div class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
+
+													<h3 class="title text-center">T&C de cierre definitivo de cuenta
+													</h3>
+
+													<form role="form" id="cerrar-cuenta" method="post"
+														autocomplete="off">
+														<div class="card-body">
+
+															<p>Si quieres eliminar tu cuenta de TinderTec
+																definitivamente, debes saber que tu cuenta, todos tus
+																datos personales, likes, dislikes y mensajes de texto
+																serán eliminados de forma automática, para siempre.
+																Debes estar de acuerdo con las siguientes
+																condiciones.<br><br>
+																Después de eliminar tu cuenta:<br><br>
+																- Se cerrará tu sesión automáticamente en todos los
+																dispositivos.<br>
+																- Se eliminarán todos tus mensajes de texto.<br>
+																- No podrás tener acceso a tus contactos en
+																TinderTec.<br>
+																- Ya no podrás iniciar sesión en los servicios de
+																TinderTec, para eso deberás crear una cuenta nueva.<br>
+
+															</p>
+
+															<!-- <input type="submit" value="Eliminar mi cuenta"> -->
+
+															<button id="btnDelete" type="button" class="button"
+																data-toggle="modal" data-target="#deleteModal">
+																Eliminar mi cuenta
+															</button>
+
+															<!-- Modal -->
+															<div class="modal fade" id="deleteModal" tabindex="-1"
+																role="dialog" aria-labelledby="lblDeleteModal"
+																aria-hidden="true">
+																<div class="modal-dialog" role="document">
+																	<div class="modal-content">
+																		<div class="modal-header">
+																			<h5 class="title" id="lblDeleteModal">¿Desea
+																				eliminar su cuenta?</h5>
+																			<button type="button" class="close"
+																				data-dismiss="modal" aria-label="Close">
+																				<span aria-hidden="true">&times;</span>
+																			</button>
+																		</div>
+																		<p style="padding-left: 30">
+																			Esta acción es irreversible.
+																		</p>
+																		<div class="modal-footer">
+
+																			<div style="width: 30%;">
+																				<button type="button"
+																					class="cancelButton"
+																					data-dismiss="modal">Cancelar</button>
+																			</div>
+
+																			<div style="width: 35%;">
+																				<button type="button"
+																					class="button">Aceptar</button>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+
+															</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+ 		  
+ 		 </div>
+        <header class="header">
+            <div class="logoContainer">
+                    <a href="index.html"  class="logo">
+                        <img th:src="@{/img/tindertec_logo1.png}"  class="logoImg">
+                    </a>
+            </div>
+        </header>
+    
+        <div class="container-tindertec">
+        </div>
+    
+        <footer class="footer">
+            <a href="index.html" target="_blank">Tindertec © 2022 Todos los derechos reservados.</a>
+        </footer>
+    
+    </div>	
+
+</div>
+</body>
+    <!-- JS -->
+	<script src="code.jquery.com/jquery-3.2.1.slim.min.js" ></script>
+	<script src="cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" ></script>
+	<script src="cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+	<!-- Fin JS -->
+</html>
