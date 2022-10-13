@@ -1,12 +1,17 @@
 package org.tindertec.controller;
 
 import org.tindertec.model.Usuario;
+
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +19,16 @@ import org.springframework.web.client.RestTemplate;
 /**
  * @author Richard
  */
+
 @Controller
 public class SeguridadController {
 	public static String nombresYedad;
 	public static String foto1;
 	public static String edad;
 	public static int CodUsuInSession;
-
+	
+	public  static final  String END_POINT="http://localhost:8081/rest/";
+	
 	@GetMapping("/")
 	public String login(Model model) {
 		model.addAttribute("usuario", new Usuario());
@@ -43,19 +51,22 @@ public class SeguridadController {
 
 	@PostMapping("/Ingreso")
 	public String validarUsuario(@ModelAttribute Usuario usuario, Model model) throws ParseException {
-
+	
 		//Consumiendo servicio
-		String uri="http://localhost:8081/rest/login?u="+usuario.getEmail()+"&c="+usuario.getClave();
-		RestTemplate restTemplate = new RestTemplate();
-		String msj =restTemplate.getForObject(uri, String.class);
+		String uri=END_POINT+"login";
 		
-	if (msj.equals("OK")) {
-		Usuario u = new Usuario();
-		model.addAttribute("usuario",u);
-		CodUsuInSession=u.getCod_usu();
-		//edad=obtenerEdad(repoUsua.findById(u.getCod_usu()).get().getFecha_naci());
-		//nombresYedad=repoUsua.findById(u.getCod_usu()).get().getNombres()+","+edad;
-		//foto1=repoUsua.findById(u.getCod_usu()).get().getFoto1();
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    HttpEntity<Usuario> request =new HttpEntity<Usuario>(usuario,headers);
+	    RestTemplate restTemplate = new RestTemplate();
+	    Usuario user = restTemplate.postForObject(uri, request, Usuario.class);
+
+	if (user != null) {
+		model.addAttribute("usuario",user);
+		CodUsuInSession=user.getCod_usu();
+		edad=obtenerEdad(user.getFecha_naci());
+		nombresYedad=user.getNombres()+","+edad;
+		foto1=user.getFoto1();
 		model.addAttribute("nombresYedad",nombresYedad);
 		model.addAttribute("f1",foto1);
 
@@ -64,12 +75,12 @@ public class SeguridadController {
 	else{
 		
 		//model.addAttribute("usuario", new Usuario());
-		model.addAttribute("msjLogin",msj);
+		model.addAttribute("msjLogin","Credenciales Incorrectas");
 		return "Login/Login";
 			
 	}
 }
-	/*
+	
 	@GetMapping("/LogOut")
 	public String logOut( Model model) {
 		model.addAttribute("usuario",new Usuario());
@@ -97,5 +108,5 @@ public class SeguridadController {
 	        age= diffrence+"";
 	        
 		return age;
-	}*/
+	}
 }
