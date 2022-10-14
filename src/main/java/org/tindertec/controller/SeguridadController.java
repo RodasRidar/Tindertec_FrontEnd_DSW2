@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.tindertec.service.*;
 /**
  * @author Richard
  */
@@ -27,7 +28,8 @@ public class SeguridadController {
 	public static String edad;
 	public static int CodUsuInSession;
 	
-	public  static final  String END_POINT="http://localhost:8081/rest/";
+	@Autowired
+	private SeguridadService seguridadS;
 	
 	@GetMapping("/")
 	public String login(Model model) {
@@ -51,16 +53,9 @@ public class SeguridadController {
 
 	@PostMapping("/Ingreso")
 	public String validarUsuario(@ModelAttribute Usuario usuario, Model model) throws ParseException {
-	
-		//Consumiendo servicio
-		String uri=END_POINT+"login";
 		
-		HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.APPLICATION_JSON);
-	    HttpEntity<Usuario> request =new HttpEntity<Usuario>(usuario,headers);
-	    RestTemplate restTemplate = new RestTemplate();
-	    Usuario user = restTemplate.postForObject(uri, request, Usuario.class);
-
+	    Usuario user =seguridadS.Login(usuario) ;
+	    
 	if (user != null) {
 		model.addAttribute("usuario",user);
 		CodUsuInSession=user.getCod_usu();
