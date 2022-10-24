@@ -1,6 +1,7 @@
 package org.tindertec.controller;
 
 import org.tindertec.model.Usuario;
+import org.tindertec.service.UsuarioService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,9 +16,44 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/usuario")
 public class UsuarioController {
+	
+	@Autowired
+	private UsuarioService usuarioService;
+	
+	@GetMapping("/registrar")
+	public String cargarregistrarUsuario(Model model, @ModelAttribute Usuario usuario) {
 
-/*
+		model.addAttribute("lstSedes", usuarioService.listadoSedes().getBody());
+		model.addAttribute("lstCarreras", usuarioService.listadoCarreras().getBody());
+		model.addAttribute("lstGeneros", usuarioService.listadoGeneros().getBody());
+		model.addAttribute("lstInteres", usuarioService.listadoIntereses().getBody());
+
+		return "Usuario/RegistroUsuario";
+	}
+	
+	@PostMapping("/registrar")
+	public String registrarUsuario(Model model, @ModelAttribute Usuario usuario) {
+
+		try {
+			usuarioService.registrarUsuario(usuario);
+			model.addAttribute("msjConfirmation",
+					"¡Se registro el usuario " + usuario.getNombres() + " correctamente!");
+			return "Login/Login";
+		} catch (Exception e) {
+			model.addAttribute("lstSedes", usuarioService.listadoSedes().getBody());
+			model.addAttribute("lstCarreras", usuarioService.listadoCarreras().getBody());
+			model.addAttribute("lstGeneros", usuarioService.listadoGeneros().getBody());
+			model.addAttribute("lstInteres", usuarioService.listadoIntereses().getBody());
+
+			model.addAttribute("msjConfirmation", "Ups!,Ocurrio un problema en el registro");
+			return "Usuario/RegistroUsuario";
+		}
+	}
+
+	
+	/*
 	@GetMapping("/Usuario/Registrar")
 	public String cargarregistrarUsuario(Model model, @ModelAttribute Usuario usuario) {
 
