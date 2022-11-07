@@ -238,7 +238,7 @@
                                                                             <option th:each="p:${lstInteres}"
                                                                                 th:value="${p.cod_interes}"
                                                                                 th:text="${p.des_interes}"
-                                                                                 th:selected="${inteSelect==p.cod_interes}">inteSelect
+                                                                                 th:selected="${inteSelect == p.cod_interes}">
                                                                             </option>
                                                                         </select>
                                                                     </div>
@@ -251,7 +251,7 @@
                                                                             <option th:each="c:${lstCarrera}"
                                                                                 th:value="${c.cod_carrera}"
                                                                                 th:text="${c.des_carrera}"
-                                                                                th:selected="${carreraSelect==c.cod_carrera}"
+                                                                                th:selected="${carreraSelect == c.cod_carrera}"
                                                                                 >
                                                                             </option>
                                                                         </select>
@@ -265,7 +265,7 @@
                                                                             <option th:each="s:${lstSede}"
                                                                                 th:value="${s.cod_sede}"
                                                                                 th:text="${s.des_sede}"
-                                                                                th:selected="${sedeSelect==s.cod_sede}">
+                                                                                th:selected="${sedeSelect == s.cod_sede}">
                                                                             </option >
                                                                             
                                                                         </select>

@@ -16,13 +16,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/Usuario")
+@RequestMapping()
 public class UsuarioController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
 	
-	@GetMapping("/registrar")
+	@GetMapping("Usuario/Registrar")
 	public String cargarregistrarUsuario(Model model, @ModelAttribute Usuario usuario) {
 
 		model.addAttribute("lstSedes", usuarioService.listadoSedes().getBody());
@@ -33,7 +33,7 @@ public class UsuarioController {
 		return "Usuario/RegistroUsuario";
 	}
 	
-	@PostMapping("/registrar")
+	@PostMapping("Usuario/Registrar")
 	public String registrarUsuario(Model model, @ModelAttribute Usuario usuario) {
 
 		try {
@@ -52,7 +52,7 @@ public class UsuarioController {
 		}
 	}
 	
-	@GetMapping
+	@GetMapping("Perfil")
 	public String cargarPerfil(Model model, @ModelAttribute Usuario usuario) {
 		String nombresYedad = SeguridadController.nombresYedad;
 		String foto1 = SeguridadController.foto1;
@@ -61,16 +61,17 @@ public class UsuarioController {
 		Usuario currentUsus = usuarioService.BuscarUsuario(CodUsuInSession);
 		System.out.println(currentUsus);
 		model.addAttribute("nroFotos", 1);
-		if (currentUsus.getFoto1().length() > 1) {
+		
+		if (currentUsus.getFoto2().length() > 1) {
 			model.addAttribute("nroFotos", 2);
 		}
-		if (currentUsus.getFoto2().length() > 1) {
+		if (currentUsus.getFoto3().length() > 1) {
 			model.addAttribute("nroFotos", 3);
 		}
-		if (currentUsus.getFoto3().length() > 1) {
+		if (currentUsus.getFoto4().length() > 1) {
 			model.addAttribute("nroFotos", 4);
 		}
-		if (currentUsus.getFoto4().length() > 1) {
+		if (currentUsus.getFoto5().length() > 1) {
 			model.addAttribute("nroFotos", 5);
 		}
 
@@ -100,70 +101,54 @@ public class UsuarioController {
 		return "MantenerUsuario/MantenerUsuario";
 	}
 
-	
-
-	@PostMapping("/Guardar")
-	public String guardarUsuario(Model model, @ModelAttribute Usuario usuario) {
-
-		String nombresYedad = SeguridadController.nombresYedad;
+	@PostMapping("Perfil/Guardar")
+	public String guardarUsuario(Model model, @ModelAttribute Usuario usuario){
+		String m ="";
 		String foto1 = SeguridadController.foto1;
 
 		int CodUsuInSession = SeguridadController.CodUsuInSession;
 
-		try {
-			String m = usuarioService.editarUsuario(usuario);
-			System.out.println(m);
-			model.addAttribute("msjConfirmacionEditarPerfil", "Cambios guardados exitosamente.");
+			usuario.setCod_usu(CodUsuInSession);
+			m = usuarioService.editarUsuario(usuario);
 
-			Usuario currentUsu = usuarioService.BuscarUsuario(CodUsuInSession);
-			System.out.println(currentUsu);
+			model.addAttribute("msjConfirmacionEditarPerfil", m);
 			// Manter Usuario
-			model.addAttribute("nombresUsu", currentUsu.getNombres());
-			model.addAttribute("descripcionUsu", currentUsu.getDescripcion());
+			model.addAttribute("nombresUsu", usuario.getNombres());
+			model.addAttribute("descripcionUsu", usuario.getDescripcion());
+			
+			model.addAttribute("lstSede", usuarioService.listadoSedes().getBody());
+			model.addAttribute("lstCarrera", usuarioService.listadoCarreras().getBody());
+			model.addAttribute("lstInteres", usuarioService.listadoIntereses().getBody());
 			// options
-			model.addAttribute("inteSelect", currentUsu.getCod_interes());
-			model.addAttribute("carreraSelect", currentUsu.getCod_carrera());
-			model.addAttribute("sedeSelect", currentUsu.getCod_sede());
-
-			model.addAttribute("lstSede", usuarioService.listadoSedes());
-			model.addAttribute("lstCarrera", usuarioService.listadoCarreras());
-			model.addAttribute("lstInteres", usuarioService.listadoIntereses());
+			model.addAttribute("inteSelect", usuario.getCod_interes());
+			model.addAttribute("carreraSelect", usuario.getCod_carrera());
+			model.addAttribute("sedeSelect", usuario.getCod_sede());
 
 			// first particion
-			model.addAttribute("nombresYedad",
-					currentUsu.getNombres() + "," + obtenerEdad(currentUsu.getFecha_naci()));
-			model.addAttribute("f1", currentUsu.getFoto1());
-
-		} catch (Exception e) {
-			model.addAttribute("msjConfirmacionEditarPerfil", "Error al guardar cambios.");
-			model.addAttribute("lstSede", usuarioService.listadoSedes());
-			model.addAttribute("lstCarrera", usuarioService.listadoCarreras());
-			model.addAttribute("lstInteres", usuarioService.listadoIntereses());
-
-			model.addAttribute("nombresYedad", nombresYedad);
+			model.addAttribute("nombresYedad",usuario.getNombres() + "," + SeguridadController.edad);
 			model.addAttribute("f1", foto1);
-		}
-		Usuario currentUsus = usuarioService.BuscarUsuario(CodUsuInSession);
+
+
 		// Galeria
+		Usuario currentUsu = usuarioService.BuscarUsuario(CodUsuInSession);
 		model.addAttribute("nroFotos", 1);
-		if (currentUsus.getFoto2().length() > 1) {
+		if (currentUsu.getFoto2().length() > 1) {
 			model.addAttribute("nroFotos", 2);
 		}
-		if (currentUsus.getFoto3().length() > 1) {
+		if (currentUsu.getFoto3().length() > 1) {
 			model.addAttribute("nroFotos", 3);
 		}
-		if (currentUsus.getFoto4().length() > 1) {
+		if (currentUsu.getFoto4().length() > 1) {
 			model.addAttribute("nroFotos", 4);
 		}
-		if (currentUsus.getFoto5().length() > 1) {
+		if (currentUsu.getFoto5().length() > 1) {
 			model.addAttribute("nroFotos", 5);
 		}
-		model.addAttribute("foto1Gal", currentUsus.getFoto1());
-		model.addAttribute("foto2Gal", currentUsus.getFoto2());
-		model.addAttribute("foto3Gal", currentUsus.getFoto3());
-		model.addAttribute("foto4Gal", currentUsus.getFoto4());
-		model.addAttribute("foto5Gal", currentUsus.getFoto5());
-		System.out.println(currentUsus);
+		model.addAttribute("foto1Gal", currentUsu.getFoto1());
+		model.addAttribute("foto2Gal", currentUsu.getFoto2());
+		model.addAttribute("foto3Gal", currentUsu.getFoto3());
+		model.addAttribute("foto4Gal", currentUsu.getFoto4());
+		model.addAttribute("foto5Gal", currentUsu.getFoto5());
 		return "MantenerUsuario/MantenerUsuario";
 	}
 	
@@ -184,7 +169,7 @@ public class UsuarioController {
 		return age;
 	}
 
-	@PostMapping("/AgregarFoto")
+	@PostMapping("Perfil/AgregarFoto")
 	public String agregarFoto(@ModelAttribute Usuario usuario, Model model,
 			@RequestParam(name = "url_foto", required = true) String url_foto) {
 
@@ -219,10 +204,10 @@ public class UsuarioController {
 			model.addAttribute("inteSelect", currentUsu.getCod_interes());
 			model.addAttribute("carreraSelect", currentUsu.getCod_carrera());
 			model.addAttribute("sedeSelect", currentUsu.getCod_sede());
-
-			model.addAttribute("lstSede", usuarioService.listadoSedes());
-			model.addAttribute("lstCarrera", usuarioService.listadoCarreras());
-			model.addAttribute("lstInteres", usuarioService.listadoIntereses());
+			
+			model.addAttribute("lstSede", usuarioService.listadoSedes().getBody());
+			model.addAttribute("lstCarrera", usuarioService.listadoCarreras().getBody());
+			model.addAttribute("lstInteres", usuarioService.listadoIntereses().getBody());
 
 			// first particion
 			model.addAttribute("nombresYedad",
@@ -261,9 +246,9 @@ public class UsuarioController {
 
 			model.addAttribute("msjConfirmacionAddFoto", "Ocurrio un error al añadir tu foto");
 
-			model.addAttribute("lstSede", usuarioService.listadoSedes());
-			model.addAttribute("lstCarrera", usuarioService.listadoCarreras());
-			model.addAttribute("lstInteres", usuarioService.listadoIntereses());
+			model.addAttribute("lstSede", usuarioService.listadoSedes().getBody());
+			model.addAttribute("lstCarrera", usuarioService.listadoCarreras().getBody());
+			model.addAttribute("lstInteres", usuarioService.listadoIntereses().getBody());
 
 			model.addAttribute("nombresYedad", nombresYedad);
 			model.addAttribute("f1", foto1);

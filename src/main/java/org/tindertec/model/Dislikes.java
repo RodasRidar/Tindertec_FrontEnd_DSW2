@@ -2,6 +2,8 @@ package org.tindertec.model;
 
 
 
+
+
 import lombok.Data;
 
 
