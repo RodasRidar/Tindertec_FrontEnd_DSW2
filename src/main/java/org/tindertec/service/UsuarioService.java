@@ -73,4 +73,31 @@ public class UsuarioService {
 	    
 	    return usu;
 	}
+	
+	//Editar Usuario
+	public String editarUsuario(Usuario u){
+		String uri = SeguridadService.END_POINT+"usuario/editar"; //http://localhost:8081/rest/usuario/editar
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    
+	    HttpEntity<Usuario> request = new HttpEntity<Usuario>(u, headers);
+	    RestTemplate restTemplate = new RestTemplate();
+	    String usu = restTemplate.postForObject(uri, request, String.class);
+	    
+	    return usu;
+	}
+	
+	public String agregarFoto(int userId, int posicion, String url) {
+		String uri=SeguridadService.END_POINT+"usuario/agregarFoto?CodUsuInSession="+userId+"&posicion="+posicion+"&url_foto="+url;
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    HttpEntity<String> request = new HttpEntity<String>("", headers);
+
+		RestTemplate restTemplate = new RestTemplate();
+		String user = restTemplate.postForObject(uri, request, String.class);
+		
+		return user;
+	}
 }
