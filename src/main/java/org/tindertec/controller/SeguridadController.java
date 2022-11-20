@@ -30,7 +30,8 @@ public class SeguridadController {
 	
 	@Autowired
 	private SeguridadService seguridadS;
-	
+	@Autowired
+	private UsuarioService usuService;
 	@GetMapping("/")
 	public String login(Model model) {
 		model.addAttribute("usuario", new Usuario());
@@ -54,9 +55,10 @@ public class SeguridadController {
 	@PostMapping("/Ingreso")
 	public String validarUsuario(@ModelAttribute Usuario usuario, Model model) throws ParseException {
 		
-	    Usuario user =seguridadS.Login(usuario) ;
-	    
-	if (user != null) {
+		String msj =seguridadS.VerificarCredenciales(usuario) ;
+	
+	if (msj.toString().equals("OK")) {
+		Usuario user =seguridadS.Login(usuario) ;
 		model.addAttribute("usuario",user);
 		CodUsuInSession=user.getCod_usu();
 		edad=obtenerEdad(user.getFecha_naci());
@@ -68,9 +70,8 @@ public class SeguridadController {
 		return "BuscarAmistad/Bienvenida";
 		} 
 	else{
-		
 		//model.addAttribute("usuario", new Usuario());
-		model.addAttribute("msjLogin","Credenciales Incorrectas");
+		model.addAttribute("msjLogin",msj);
 		return "Login/Login";
 			
 	}

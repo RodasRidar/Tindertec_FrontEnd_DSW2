@@ -25,5 +25,16 @@ public class SeguridadService {
 	    
 	    return user;
 	}
-
+	public String VerificarCredenciales(Usuario usuario) {
+		//Consumiendo servicio
+		String uri=END_POINT+"login/verificar";
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    HttpEntity<Usuario> request =new HttpEntity<Usuario>(usuario,headers);
+	    RestTemplate restTemplate = new RestTemplate();
+	    String user = restTemplate.postForObject(uri, request, String.class);
+	    
+	    return user;
+	}
 }

@@ -22,6 +22,42 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 	
+	@GetMapping("Usuario/Registrar/Bot")
+
+	public String cargarregistrarUsuarioBot(Model model, @ModelAttribute Usuario usuario,
+			@RequestParam(name = "name", required = false) String nombre,
+			@RequestParam(name = "desc", required = false) String descripcion,
+			@RequestParam(name = "date", required = false) String fecha,
+			@RequestParam(name = "g", required = false) int genero ,
+			@RequestParam(name = "i", required = false)  int genInteres,
+			@RequestParam(name = "s", required = false) int sede,
+			@RequestParam(name = "c", required = false) int carrera
+			) {
+		
+		usuario.setCod_carrera(carrera);
+		usuario.setCod_genero(genero);
+		usuario.setCod_interes(genInteres);
+		usuario.setCod_sede(sede);
+		usuario.setFecha_naci(fecha);
+		usuario.setDescripcion(descripcion);
+		usuario.setNombres(nombre);
+
+		model.addAttribute("lstSedes", usuarioService.listadoSedes().getBody());
+		model.addAttribute("lstCarreras", usuarioService.listadoCarreras().getBody());
+		model.addAttribute("lstGeneros", usuarioService.listadoGeneros().getBody());
+		model.addAttribute("lstInteres", usuarioService.listadoIntereses().getBody());
+		model.addAttribute("usuario", usuario);
+		model.addAttribute("inteSelect", genInteres);
+		model.addAttribute("carreraSelect", carrera);
+		model.addAttribute("sedeSelect", sede);
+		model.addAttribute("generoSelect", genero);
+		
+		
+
+
+		return "Usuario/RegistroUsuario";
+	}
+	
 	@GetMapping("Usuario/Registrar")
 	public String cargarregistrarUsuario(Model model, @ModelAttribute Usuario usuario) {
 
@@ -33,7 +69,7 @@ public class UsuarioController {
 		return "Usuario/RegistroUsuario";
 	}
 	
-	@PostMapping("Usuario/Registrar")
+	@PostMapping("usuario/registrar")
 	public String registrarUsuario(Model model, @ModelAttribute Usuario usuario) {
 
 		try {
@@ -284,38 +320,22 @@ public class UsuarioController {
 		return "MantenerUsuario/MantenerUsuario";
 	}
 	
-	/*
-	
-	@Transactional
+
+	//@Transactional
 	@PostMapping("/Perfil/eliminar")
 	public String eliminarUsuario(@ModelAttribute Usuario usuario, Model model) {
 		int CodUsuInSession = SeguridadController.CodUsuInSession;
 		try {
-			repoUsu.USP_USUARIO_ELIMINAR(CodUsuInSession);
-			model.addAttribute("msjConfirmation", "Usuario eliminado Correctamente");
+			Usuario user=new Usuario();
+			user.setCod_usu(CodUsuInSession);
+			String msj=usuarioService.eliminar(user);
+			model.addAttribute("msjConfirmation", msj);
 			return "Login/Login";
 		} catch (Exception e) {
 			
 			model.addAttribute("msjConfirmacionAddFoto", "Error al eliminar usuario");
 			return "MantenerUsuario/MantenerUsuario";
 		}
-		
 	}
 
-	public String obtenerEdad(String fecna) throws ParseException {
-
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD", Locale.ENGLISH);
-		// fecna= repoUsua.findById(1).getFecha_naci();
-		Date fechaNacimiento = sdf.parse(fecna);
-		Date secondDate = sdf.parse("2022-01-01");
-
-		long diff = (secondDate.getTime() - fechaNacimiento.getTime()) / 365;
-
-		TimeUnit time = TimeUnit.DAYS;
-		long diffrence = time.convert(diff, TimeUnit.MILLISECONDS);
-		String age;
-		age = diffrence + "";
-
-		return age;
-	}*/
 }

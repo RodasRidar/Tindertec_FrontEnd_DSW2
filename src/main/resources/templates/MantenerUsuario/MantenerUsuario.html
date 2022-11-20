@@ -28,11 +28,15 @@
         <div class="modal-dialog">
             <form  action="/Perfil/AgregarFoto" method="post" class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel" style="margin: auto;">Ingrese URL de su foto:</h5>
+                    <h5 class="modal-title" id="exampleModalLabel" style="margin: auto;">Agregar un nueva Fotografía:</h5>
                 </div>
                 <div class="modal-body">
-                    <input type="text" name="url_foto" placeholder="https://www..." required="required">
-                </div>
+	                <label class="custom-file-upload" id="file-upload">
+	                    <input id="my_file" type="file" placeholder=""  required>
+	                    <i class="uil uil-image-plus"></i>&nbsp; Escoger ...
+	                    <input hidden name="url_foto" id="url_foto">
+	                 </label>
+                </div>                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Añadir</button>
@@ -67,7 +71,7 @@
         <div class="second-partition" style=" background: linear-gradient(45deg,#fd267a,#ff6036);">
 
             <div class="likes">
-                <div class="app" style="overflow: auto;  position: absolute;Z-INDEX: 1;height: 74vh;width: 60vw;border: 1px solid black;margin-top: 14vh; margin-left: 10vw;">
+                <div class="app" style="overflow: auto;  position: absolute;Z-INDEX: 1;height: 74vh;width: 60vw;margin-top: 14vh; margin-left: 10vw;">
                     <div class="profile-page">
                         <div class="main main-raised">
                             <div class="profile-content">
@@ -377,5 +381,92 @@
 
     <script th:src="@{/js/index.js}"></script>
 </body>
+    <style>
+    input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #fc3177;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    width:100%;
+    border-radius:8px;
+}
+    </style>
+<script type="module"> 
+ // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-app.js";
+  import { getStorage ,ref, uploadBytesResumable, getDownloadURL  } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-storage.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyC8MvDw4lxvWHZQ_iMlymCRIJJqV-bHhB8",
+    authDomain: "tindertec-20381.firebaseapp.com",
+    projectId: "tindertec-20381",
+    storageBucket: "tindertec-20381.appspot.com",
+    messagingSenderId: "1097084949694",
+    appId: "1:1097084949694:web:529745e0842c793862baef"
+  };
+var archivoPromesa = new Promise(function (resolve) {
+        var obj = ($('#my_file'))[0].files[0];
+
+        const intervalID = setInterval(myCallback, 500);
+
+        function myCallback() {
+	   console.log("busscando")
+            obj = ($('#my_file'))[0].files[0];
+            if (obj != null) {
+                clearInterval(intervalID)
+               
+                resolve(obj);
+            }
+
+        }
+
+    })
+   archivoPromesa.then(function (resultado) {
+	   console.log("enonctrado uploading")
+	   uploadProfileImg();
+	   
+	   console.log("uploaded")
+	   
+   })
+  // Initialize Firebase
+  var app = initializeApp(firebaseConfig);
+  var storage = getStorage();
+
+	   function uploadProfileImg(){
+			var file = ($('#my_file'))[0].files[0];
+				if(!file){
+				}else{
+				
+				const storageRef = ref(storage,"userProfile/photos/"+ file.name);
+				var uploadTask = uploadBytesResumable(storageRef,file);
+				
+				uploadTask.on('state_changed', function(snapshot){
+				}, function(error){
+				console.log(error);
+				},function(){
+				console.log('Archivo o imagen subida a Firebase');
+				
+			    // Upload completed successfully, now we can get the download URL
+			    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+					document.getElementById("url_foto").setAttribute("value",downloadURL+"")
+			      console.log('File available at', document.getElementById("url_foto").value);
+			      if(document.getElementById("url_foto").value != ""){
+					 document.getElementById("file-upload").setAttribute("style","background:antiquewhite;")
+					 document.getElementById("my_file").setAttribute("disabled","true")
+				  }
+			    });
+				});
+				
+				}
+			}
+			
+			
+			//document.getElementById("ver").addEventListener("click", uploadProfileImg);
+	</script>
 </html>

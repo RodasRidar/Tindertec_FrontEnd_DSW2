@@ -100,4 +100,16 @@ public class UsuarioService {
 		
 		return user;
 	}
+	public String eliminar(Usuario u) {
+		String uri=SeguridadService.END_POINT+"usuario/eliminar";
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    
+	    HttpEntity<Usuario> request = new HttpEntity<Usuario>(u, headers);
+	    RestTemplate restTemplate = new RestTemplate();
+	    String usu = restTemplate.postForObject(uri, request, String.class);
+		
+		return usu;
+	}
 }
