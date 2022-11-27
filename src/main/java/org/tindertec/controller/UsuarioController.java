@@ -31,7 +31,8 @@ public class UsuarioController {
 			@RequestParam(name = "g", required = false) int genero ,
 			@RequestParam(name = "i", required = false)  int genInteres,
 			@RequestParam(name = "s", required = false) int sede,
-			@RequestParam(name = "c", required = false) int carrera
+			@RequestParam(name = "c", required = false) int carrera,
+			@RequestParam(name = "e", required = false) String email
 			) {
 		
 		usuario.setCod_carrera(carrera);
@@ -41,7 +42,8 @@ public class UsuarioController {
 		usuario.setFecha_naci(fecha);
 		usuario.setDescripcion(descripcion);
 		usuario.setNombres(nombre);
-
+		usuario.setEmail(email);
+		
 		model.addAttribute("lstSedes", usuarioService.listadoSedes().getBody());
 		model.addAttribute("lstCarreras", usuarioService.listadoCarreras().getBody());
 		model.addAttribute("lstGeneros", usuarioService.listadoGeneros().getBody());
