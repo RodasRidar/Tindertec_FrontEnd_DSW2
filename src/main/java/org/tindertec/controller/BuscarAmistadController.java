@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -48,14 +50,12 @@ public class BuscarAmistadController {
 
 	
 	@GetMapping("/BuscarAmistar/Bienvenida")
-	public String cargarBienvenida(Model model) throws ParseException {
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		//int CodUsuInSession = SeguridadController.CodUsuInSession;
-		// enviarle el usuario que inicio sesion
+	public String cargarBienvenida(Model model,HttpSession session) throws ParseException {
+		Usuario user=(Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres();
+		String foto1 = user.getFoto1();
 		model.addAttribute("nombresYedad", nombresYedad);
 		model.addAttribute("f1", foto1);
-
 		return "BuscarAmistad/Bienvenida";
 	}
 
