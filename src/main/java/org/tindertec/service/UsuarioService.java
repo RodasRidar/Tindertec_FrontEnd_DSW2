@@ -24,6 +24,13 @@ public class UsuarioService {
 		return user;
 	}
 	
+	public Usuario  BuscarUsuarioEmail(String email) {
+		String uri=SeguridadService.END_POINT+"usuario/obtenerEmail?email="+email;
+		RestTemplate restTemplate = new RestTemplate();
+		Usuario user = restTemplate.getForObject(uri, Usuario.class);
+		
+		return user;
+	}
 	//Listado de Carreras
 	public ResponseEntity<Carreras[]> listadoCarreras() {
 		String uri=SeguridadService.END_POINT+"usuario/listaCarreras";
@@ -59,6 +66,7 @@ public class UsuarioService {
 		
 		return listaGeneros;
 	}
+	
 	
 	/*Registro de Usuario
 	public Usuario registrarUsuario(Usuario objUsuario){
