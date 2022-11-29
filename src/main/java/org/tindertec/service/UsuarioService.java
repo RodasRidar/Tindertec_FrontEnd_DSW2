@@ -60,9 +60,22 @@ public class UsuarioService {
 		return listaGeneros;
 	}
 	
-	//Registro de Usuario
+	/*Registro de Usuario
 	public Usuario registrarUsuario(Usuario objUsuario){
 		String uri=SeguridadService.END_POINT+"usuario/registrar";
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    
+	    HttpEntity<Usuario> request =new HttpEntity<Usuario>(objUsuario, headers);
+	    RestTemplate restTemplate = new RestTemplate();
+	    Usuario usu = restTemplate.postForObject(uri, request, Usuario.class);
+	    
+	    return usu;
+	}*/
+	//Registro de Usuario
+	public Usuario registrarUsuario(Usuario objUsuario){
+		String uri=SeguridadService.END_POINTSECURITY+"auth/nuevo";
 		
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_JSON);

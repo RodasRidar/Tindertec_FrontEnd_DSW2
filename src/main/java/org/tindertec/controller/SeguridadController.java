@@ -59,7 +59,8 @@ public class SeguridadController {
 	if (user != null) {
 		model.addAttribute("usuario",user);
 		CodUsuInSession=user.getCod_usu();
-		edad=obtenerEdad(user.getFecha_naci());
+		//edad=obtenerEdad(user.getFecha_naci());
+		edad= "19";
 		nombresYedad=user.getNombres()+","+edad;
 		foto1=user.getFoto1();
 		model.addAttribute("nombresYedad",nombresYedad);
@@ -88,7 +89,7 @@ public class SeguridadController {
 		return "Login/Login";
 		}
 	
-	public String obtenerEdad(String fecna) throws ParseException {
+	/*public String obtenerEdad(String fecna) throws ParseException {
 		
 		 SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD", Locale.ENGLISH);
 			//fecna= repoUsua.findById(1).get().getFecha_naci();
@@ -103,5 +104,5 @@ public class SeguridadController {
 	        age= diffrence+"";
 	        
 		return age;
-	}
+	}*/
 }

@@ -13,9 +13,10 @@ import org.tindertec.model.Usuario;
 public class SeguridadService {
 	
 	public  static final  String END_POINT="http://localhost:8081/rest/";
+	public  static final  String END_POINTSECURITY="http://localhost:8081/";
 	public Usuario Login(Usuario usuario) {
 		//Consumiendo servicio
-		String uri=END_POINT+"login";
+		String uri=END_POINTSECURITY+"auth/login";
 		
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_JSON);
