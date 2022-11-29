@@ -39,7 +39,8 @@ public class SeguridadController {
 	
 	@Autowired
 	private SeguridadService seguridadS;
-	
+	@Autowired
+	private UsuarioService usuService;
 	@GetMapping("/")
 	public String login(Model model) {
 		model.addAttribute("usuario", new Usuario());
@@ -62,7 +63,6 @@ public class SeguridadController {
 
 	@PostMapping("/Ingreso")
 	public String validarUsuario(@ModelAttribute Usuario usuario, Model model) throws ParseException {
-		
 		try {
 		//autorizar.cuando haya token
 		JwtDto tokenRecibio = seguridadS.Login(usuario);
@@ -88,6 +88,7 @@ public class SeguridadController {
 			model.addAttribute("msjLogin","Credenciales Incorrectas");
 			return "Login/Login";
 		}
+
 }
 	
 	@GetMapping("/LogOut")

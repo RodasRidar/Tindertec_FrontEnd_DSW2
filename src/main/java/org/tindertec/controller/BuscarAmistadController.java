@@ -3,6 +3,7 @@ package org.tindertec.controller;
 import org.tindertec.model.Chat;
 import org.tindertec.model.Match;
 import org.tindertec.model.Usuario;
+import org.tindertec.service.BuscarAmistadService;
 import org.tindertec.service.ChatService;
 import org.tindertec.service.UsuarioService;
 
@@ -27,6 +28,8 @@ public class BuscarAmistadController {
 	private ChatService chatS;
 	@Autowired
 	private UsuarioService usuarioS;
+	@Autowired
+	private BuscarAmistadService buscarAmistadS;
 	
 	/**
 	 * @author Richard
@@ -262,16 +265,14 @@ public class BuscarAmistadController {
 	 * @author Jorge
 	 */
 	
-	/*
- 
 	@GetMapping("/Inicio")
-	public String cargarInicio(Model model) throws ParseException {
+	public String cargarInicio(Model model) throws ParseException{
 		String nombresYedad = SeguridadController.nombresYedad;
 		String foto1 = SeguridadController.foto1;
 		int CodUsuInSession = SeguridadController.CodUsuInSession;
 		// enviarle el usuario que inicio sesion
 		int codigoValidacion = -1;
-		Usuario u = repoUsua.listaBuscarAmistad(CodUsuInSession);
+		Usuario u = buscarAmistadS.listaBuscarAmistad(CodUsuInSession);
 
 		if (u == null) {
 
@@ -290,8 +291,9 @@ public class BuscarAmistadController {
 
 		return "BuscarAmistad/BuscarAmistad";
 	}
-	@PostMapping("BuscarAmistad/Like")
-	public String like(@ModelAttribute Usuario usu, Model model) throws ParseException {
+	
+	@PostMapping("/BuscarAmistad/Like")
+	public String like(@ModelAttribute Usuario usu, Model model) throws ParseException{
 		String nombresYedad = SeguridadController.nombresYedad;
 		String foto1 = SeguridadController.foto1;
 		int CodUsuInSession = SeguridadController.CodUsuInSession;
@@ -299,13 +301,13 @@ public class BuscarAmistadController {
 		int codigoValidacion = -1;
 		
 		String mensaje ="";
-		 mensaje = repoLike.USP_INSERTAR_LIKE(CodUsuInSession, usu.getCod_usu());
+		 mensaje = buscarAmistadS.like(CodUsuInSession, usu.getCod_usu());
 
 		if (mensaje != null) {
 			model.addAttribute("mensajeBuscarAmistad", 1);
 			codigoValidacion = 1;
 			Usuario user = new Usuario();
-			user=repoUsua.getOne(usu.getCod_usu());
+			user=usuarioS.BuscarUsuario(usu.getCod_usu());
 
 			model.addAttribute("codigoValidacion", codigoValidacion);
 			model.addAttribute("nombreYedadBusAmi", user.getNombres() + " ," + obtenerEdad(user.getFecha_naci()));
@@ -316,7 +318,7 @@ public class BuscarAmistadController {
 			
 		}
 		else {
-			Usuario u = repoUsua.listaBuscarAmistad(CodUsuInSession);
+			Usuario u = buscarAmistadS.listaBuscarAmistad(CodUsuInSession);
 			if (u == null) {
 
 				model.addAttribute("codigoValidacion", codigoValidacion);
@@ -338,18 +340,18 @@ public class BuscarAmistadController {
 		model.addAttribute("f1", foto1);
 		return "BuscarAmistad/BuscarAmistad";
 	}
-
+	
 	@PostMapping("/BuscarAmistad/disLike")
-	public String dislike(@ModelAttribute Usuario usu, Model model) throws ParseException {
+	public String disLike(@ModelAttribute Usuario usu, Model model) throws ParseException{
 		String nombresYedad = SeguridadController.nombresYedad;
 		String foto1 = SeguridadController.foto1;
 		int CodUsuInSession = SeguridadController.CodUsuInSession;
-// hacer con @RequestParam , recuperar el parametro enviado por el formulario post
+        // hacer con @RequestParam , recuperar el parametro enviado por el formulario post
 		int codigoValidacion = -1;
-		repoDislike.USP_INSERTAR_DISLIKE(CodUsuInSession, usu.getCod_usu());
+		buscarAmistadS.disLike(CodUsuInSession, usu.getCod_usu());
 
 		// CARD
-		Usuario u = repoUsua.listaBuscarAmistad(CodUsuInSession);
+		Usuario u = buscarAmistadS.listaBuscarAmistad(CodUsuInSession);
 		if (u == null) {
 
 			model.addAttribute("codigoValidacion", codigoValidacion);
@@ -369,22 +371,5 @@ public class BuscarAmistadController {
 		model.addAttribute("f1", foto1);
 		return "BuscarAmistad/BuscarAmistad";
 	}
-*/
-
-/*
-	@PostMapping("/BuscarAmistad/VerPerfil")
-	public String VerPerfil(@RequestParam(name = "cod_usu_menu", required = false) int cod_usu_menu, Model model)
-			throws ParseException {
-
-		///// REDIRECCIONAR A PAGINA VERPERFIL
-
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
-
-		// enviarle el usuario que inicio sesion
-		model.addAttribute("nombresYedad", nombresYedad);
-		model.addAttribute("f1", foto1);
-		return "Chat/Chat";
-	}*/
+	
 }
