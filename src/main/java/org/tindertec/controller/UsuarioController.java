@@ -7,8 +7,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,7 +61,7 @@ public class UsuarioController {
 		return "Usuario/RegistroUsuario";
 	}
 	
-	@GetMapping("Usuario/Registrar")
+	@GetMapping("usuario/registrar")
 	public String cargarregistrarUsuario(Model model, @ModelAttribute Usuario usuario) {
 
 		model.addAttribute("lstSedes", usuarioService.listadoSedes().getBody());
@@ -91,11 +92,15 @@ public class UsuarioController {
 	}
 	
 	@GetMapping("Perfil")
-	public String cargarPerfil(Model model, @ModelAttribute Usuario usuario) {
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
-
+	public String cargarPerfil(Model model, @ModelAttribute Usuario usuario,HttpSession session) throws ParseException {
+		Usuario user = (Usuario) session.getAttribute("userInSesion");
+		
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
+		
+		System.out.println(user.toString());
+		
 		Usuario currentUsus = usuarioService.BuscarUsuario(CodUsuInSession);
 		System.out.println(currentUsus);
 		model.addAttribute("nroFotos", 1);
@@ -140,11 +145,14 @@ public class UsuarioController {
 	}
 
 	@PostMapping("Perfil/Guardar")
-	public String guardarUsuario(Model model, @ModelAttribute Usuario usuario){
+	public String guardarUsuario(Model model, @ModelAttribute Usuario usuario,HttpSession session) throws ParseException{
+		
 		String m ="";
-		String foto1 = SeguridadController.foto1;
-
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+		Usuario user = (Usuario) session.getAttribute("userInSesion");System.out.println(user.toString());
+		System.out.println(user.toString());
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
 
 			usuario.setCod_usu(CodUsuInSession);
 			m = usuarioService.editarUsuario(usuario);
@@ -163,7 +171,7 @@ public class UsuarioController {
 			model.addAttribute("sedeSelect", usuario.getCod_sede());
 
 			// first particion
-			model.addAttribute("nombresYedad",usuario.getNombres() + "," + SeguridadController.edad);
+			model.addAttribute("nombresYedad",nombresYedad);
 			model.addAttribute("f1", foto1);
 
 
@@ -189,31 +197,16 @@ public class UsuarioController {
 		model.addAttribute("foto5Gal", currentUsu.getFoto5());
 		return "MantenerUsuario/MantenerUsuario";
 	}
-	
-	public String obtenerEdad(String fecna) throws ParseException {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD", Locale.ENGLISH);
-		// fecna= repoUsua.findById(CodUsuInSession).getFecha_naci();
-		Date fechaNacimiento = sdf.parse(fecna);
-		Date secondDate = sdf.parse("2022-01-01");
-
-		long diff = (secondDate.getTime() - fechaNacimiento.getTime()) / 365;
-
-		TimeUnit time = TimeUnit.DAYS;
-		long diffrence = time.convert(diff, TimeUnit.MILLISECONDS);
-		String age;
-		age = diffrence + "";
-
-		return age;
-	}
 
 	@PostMapping("Perfil/AgregarFoto")
-	public String agregarFoto(@ModelAttribute Usuario usuario, Model model,
-			@RequestParam(name = "url_foto", required = true) String url_foto) {
+	public String agregarFoto(@ModelAttribute Usuario usuario, Model model,HttpSession session,
+			@RequestParam(name = "url_foto", required = true) String url_foto) throws ParseException {
 
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
+		Usuario user = (Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
 
 		try {
 			Usuario currentUsu;
@@ -322,11 +315,11 @@ public class UsuarioController {
 		return "MantenerUsuario/MantenerUsuario";
 	}
 	
-
 	//@Transactional
 	@PostMapping("/Perfil/eliminar")
-	public String eliminarUsuario(@ModelAttribute Usuario usuario, Model model) {
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+	public String eliminarUsuario(@ModelAttribute Usuario usuario, Model model,HttpSession session) {
+		Usuario use = (Usuario) session.getAttribute("userInSesion");
+		int CodUsuInSession = use.getCod_usu();
 		try {
 			Usuario user=new Usuario();
 			user.setCod_usu(CodUsuInSession);
@@ -338,6 +331,22 @@ public class UsuarioController {
 			model.addAttribute("msjConfirmacionAddFoto", "Error al eliminar usuario");
 			return "MantenerUsuario/MantenerUsuario";
 		}
+	}
+	public String obtenerEdad(String fecna) throws ParseException {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD", Locale.ENGLISH);
+		// fecna= repoUsua.findById(CodUsuInSession).getFecha_naci();
+		Date fechaNacimiento = sdf.parse(fecna);
+		Date secondDate = sdf.parse("2022-01-01");
+
+		long diff = (secondDate.getTime() - fechaNacimiento.getTime()) / 365;
+
+		TimeUnit time = TimeUnit.DAYS;
+		long diffrence = time.convert(diff, TimeUnit.MILLISECONDS);
+		String age;
+		age = diffrence + "";
+
+		return age;
 	}
 
 }

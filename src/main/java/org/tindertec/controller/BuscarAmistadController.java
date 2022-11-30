@@ -55,7 +55,7 @@ public class BuscarAmistadController {
 	@GetMapping("/BuscarAmistar/Bienvenida")
 	public String cargarBienvenida(Model model,HttpSession session) throws ParseException {
 		Usuario user=(Usuario) session.getAttribute("userInSesion");
-		String nombresYedad = user.getNombres();
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
 		String foto1 = user.getFoto1();
 		model.addAttribute("nombresYedad", nombresYedad);
 		model.addAttribute("f1", foto1);
@@ -63,10 +63,11 @@ public class BuscarAmistadController {
 	}
 
 	@GetMapping("/Chat")
-	public String cargarChat(Model model) throws ParseException {
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+	public String cargarChat(Model model, HttpSession session) throws ParseException {
+		Usuario user=(Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
 		Chat chat = new Chat();
 		List<Match> match=chatS.ListarMatchs(CodUsuInSession);
 		
@@ -92,10 +93,11 @@ public class BuscarAmistadController {
 	}
 
 	@PostMapping("/BuscarAmistad/Chat")
-	public String SeleccionarChat(@RequestParam(name = "id", required = true) int id, Model model) {
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+	public String SeleccionarChat(@RequestParam(name = "id", required = true) int id, Model model, HttpSession session) throws ParseException {
+		Usuario user=(Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
 		List<Match> match;
 		Usuario usu2;
 		List<Chat> chat;
@@ -158,10 +160,11 @@ public class BuscarAmistadController {
 
 	@PostMapping("/BuscarAmistad/EnviarMensaje")
 	public String sendMensaje(@RequestParam(name = "msj_enviar", required = true) String msj_enviar,
-			@RequestParam(name = "cod_usu_enviarmsj", required = true) int cod_usu_enviarmsj, Model model) {
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+			@RequestParam(name = "cod_usu_enviarmsj", required = true) int cod_usu_enviarmsj, Model model, HttpSession session) throws ParseException {
+		Usuario user=(Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
 		
 		// enviar msj
 		chatS.sendMensaje(CodUsuInSession, cod_usu_enviarmsj, msj_enviar);
@@ -214,13 +217,14 @@ public class BuscarAmistadController {
 	}
 
 	@PostMapping("/BuscarAmistad/CancelarMatch")
-	public String CancelarMatch(@RequestParam(name = "cod_usu_menu", required = true) int cod_usu_menu, Model model)
+	public String CancelarMatch(@RequestParam(name = "cod_usu_menu", required = true) int cod_usu_menu, Model model, HttpSession session)
 
 			throws ParseException {
 
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
+		Usuario user=(Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
 		
 		// cancelar match
 		chatS.CancelarMatch(CodUsuInSession, cod_usu_menu);
@@ -266,10 +270,11 @@ public class BuscarAmistadController {
 	 */
 	
 	@GetMapping("/Inicio")
-	public String cargarInicio(Model model) throws ParseException{
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+	public String cargarInicio(Model model,HttpSession session) throws ParseException{
+		Usuario user=(Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
 		// enviarle el usuario que inicio sesion
 		int codigoValidacion = -1;
 		Usuario u = buscarAmistadS.listaBuscarAmistad(CodUsuInSession);
@@ -293,10 +298,11 @@ public class BuscarAmistadController {
 	}
 	
 	@PostMapping("/BuscarAmistad/Like")
-	public String like(@ModelAttribute Usuario usu, Model model) throws ParseException{
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+	public String like(@ModelAttribute Usuario usu, Model model, HttpSession session) throws ParseException{
+		Usuario use=(Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = use.getNombres();
+		String foto1 = use.getFoto1();
+		int CodUsuInSession = use.getCod_usu();
 		
 		int codigoValidacion = -1;
 		
@@ -342,10 +348,11 @@ public class BuscarAmistadController {
 	}
 	
 	@PostMapping("/BuscarAmistad/disLike")
-	public String disLike(@ModelAttribute Usuario usu, Model model) throws ParseException{
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+	public String disLike(@ModelAttribute Usuario usu, Model model, HttpSession session) throws ParseException{
+		Usuario user=(Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
         // hacer con @RequestParam , recuperar el parametro enviado por el formulario post
 		int codigoValidacion = -1;
 		buscarAmistadS.disLike(CodUsuInSession, usu.getCod_usu());

@@ -7,33 +7,36 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
-
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping()
 public class MeGustasController {
 	@Autowired
-	private  MeGustasService service;
-	
-	
-	
+	private MeGustasService service;
+
 	@GetMapping("/MeGustas")
-	public String cargarMegustas(Model model) {
+	public String cargarMegustas(Model model,HttpSession session) throws ParseException {
 
 		// enviarle el usuario que inicio sesion
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+		Usuario user = (Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
 
 		List<Usuario> lstusu = service.Listar_Usuarios_Likes(CodUsuInSession);
 
 		if (lstusu.isEmpty()) {
 			model.addAttribute("msjEliminarLike", "!No has dado ningun ❤️, ve busca amistades!");
 		} else {
-			
+
 			model.addAttribute("listaUsuarios", lstusu);
 		}
 		model.addAttribute("nombresYedad", nombresYedad);
@@ -43,10 +46,11 @@ public class MeGustasController {
 	}
 
 	@PostMapping("/MeGustas/Eliminar")
-	public String ProcesarMegustas(@ModelAttribute Usuario usuario, Model model) {
-		String nombresYedad = SeguridadController.nombresYedad;
-		String foto1 = SeguridadController.foto1;
-		int CodUsuInSession = SeguridadController.CodUsuInSession;
+	public String ProcesarMegustas(@ModelAttribute Usuario usuario, Model model,HttpSession session) throws ParseException {
+		Usuario user = (Usuario) session.getAttribute("userInSesion");
+		String nombresYedad = user.getNombres()+", "+obtenerEdad(user.getFecha_naci());
+		String foto1 = user.getFoto1();
+		int CodUsuInSession = user.getCod_usu();
 		System.out.println(usuario);
 		// enviarle el usuario que inicio sesion
 
@@ -55,7 +59,7 @@ public class MeGustasController {
 
 		if (service.Listar_Usuarios_Likes(CodUsuInSession).isEmpty()) {
 
-			model.addAttribute("msjEliminarLike"," 📌 !Ya no hay mas me gustas que ver!");
+			model.addAttribute("msjEliminarLike", " 📌 !Ya no hay mas me gustas que ver!");
 		} else {
 			// model.addAttribute("msjEliminarLike","hay usuarios");
 			model.addAttribute("listaUsuarios", service.Listar_Usuarios_Likes(CodUsuInSession));
@@ -66,5 +70,21 @@ public class MeGustasController {
 
 		return "MeGustas/MeGustas";
 	}
-	
+	public String obtenerEdad(String fecna) throws ParseException {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-DD", Locale.ENGLISH);
+		// fecna= repoUsua.findById(CodUsuInSession).getFecha_naci();
+		Date fechaNacimiento = sdf.parse(fecna);
+		Date secondDate = sdf.parse("2022-01-01");
+
+		long diff = (secondDate.getTime() - fechaNacimiento.getTime()) / 365;
+
+		TimeUnit time = TimeUnit.DAYS;
+		long diffrence = time.convert(diff, TimeUnit.MILLISECONDS);
+		String age;
+		age = diffrence + "";
+
+		return age;
+	}
+
 }
